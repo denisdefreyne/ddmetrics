@@ -6,7 +6,87 @@
 
 # DDTelemetry
 
-TODO
+_DDTelemetry_ provides in-process, non-timeseries telemetry for short-running Ruby processes.
+
+⚠️ This project is **experimental** and should not be used in production yet.
+
+If you are looking for a full-featured timeseries monitoring system, look no further than [Prometheus](https://prometheus.io/).
+
+## Example
+
+Take the following (naïve) cache implementation as a starting point:
+
+```ruby
+class Cache
+  def initialize
+    @map = {}
+  end
+
+  def []=(key, value)
+    @map[key] = value
+  end
+
+  def [](key)
+    @map[key]
+  end
+end
+```
+
+To start instrumenting this code, require `ddtelemetry`, pass a telemetry instance into the constructor, and record some metrics:
+
+```ruby
+require 'ddtelemetry'
+
+class Cache
+  def initialize(telemetry)
+    @telemetry = telemetry
+    @map = {}
+  end
+
+  def []=(key, value)
+    @telemetry.counter(:cache).increment(:set)
+
+    @map[key] = value
+  end
+
+  def [](key)
+    if @map.key?(key)
+      @telemetry.counter(:cache).increment([:get, :hit])
+    else
+      @telemetry.counter(:cache).increment([:get, :miss])
+    end
+
+    @map[key]
+  end
+end
+```
+
+Let’s construct a cache (with telemetry) and exercise it:
+
+```ruby
+telemetry = DDTelemetry::Registry.new
+cache = Cache.new(telemetry)
+
+cache['greeting']
+cache['greeting']
+cache['greeting'] = 'Hi there!'
+cache['greeting']
+cache['greeting']
+cache['greeting']
+```
+
+Finally, print the recorded telemetry values:
+
+```ruby
+p telemetry.counter(:cache).value(:set)
+# => 1
+
+p telemetry.counter(:cache).value([:get, :hit])
+# => 3
+
+p telemetry.counter(:cache).value([:get, :miss])
+# => 2
+```
 
 ## Installation
 
