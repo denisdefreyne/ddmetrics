@@ -38,12 +38,20 @@ describe DDTelemetry::Stopwatch do
   end
 
   it 'errors when stopping when not started' do
-    expect { stopwatch.stop }.to raise_error(DDTelemetry::Stopwatch::NotRunningError)
+    expect { stopwatch.stop }
+      .to raise_error(
+        DDTelemetry::Stopwatch::NotRunningError,
+        'Cannot stop, because stopwatch is not running',
+      )
   end
 
   it 'errors when starting when already started' do
     stopwatch.start
-    expect { stopwatch.start }.to raise_error(DDTelemetry::Stopwatch::AlreadyRunningError)
+    expect { stopwatch.start }
+      .to raise_error(
+        DDTelemetry::Stopwatch::AlreadyRunningError,
+        'Cannot start, because stopwatch is already running',
+      )
   end
 
   it 'reports running status' do
