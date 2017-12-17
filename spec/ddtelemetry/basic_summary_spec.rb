@@ -6,22 +6,22 @@ describe DDTelemetry::BasicSummary do
   context 'no observations' do
     it 'errors on #min' do
       expect { subject.min }
-        .to raise_error(DDTelemetry::BasicSummary::EmptySummaryError)
+        .to raise_error(DDTelemetry::Stats::EmptyError)
     end
 
     it 'errors on #max' do
       expect { subject.max }
-        .to raise_error(DDTelemetry::BasicSummary::EmptySummaryError)
+        .to raise_error(DDTelemetry::Stats::EmptyError)
     end
 
     it 'errors on #avg' do
       expect { subject.avg }
-        .to raise_error(DDTelemetry::BasicSummary::EmptySummaryError)
+        .to raise_error(DDTelemetry::Stats::EmptyError)
     end
 
     it 'errors on #sum' do
       expect { subject.sum }
-        .to raise_error(DDTelemetry::BasicSummary::EmptySummaryError)
+        .to raise_error(DDTelemetry::Stats::EmptyError)
     end
 
     its(:count) { is_expected.to eq(0) }
