@@ -7,8 +7,12 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.verbose = false
 end
 
+task :test_samples do
+  sh 'bundle exec ruby samples/cache.rb > /dev/null'
+end
+
 RuboCop::RakeTask.new(:rubocop)
 
 task default: :test
 
-task test: %i[spec rubocop]
+task test: %i[spec rubocop test_samples]
