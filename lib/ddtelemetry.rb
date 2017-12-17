@@ -8,6 +8,7 @@ end
 require_relative 'ddtelemetry/basic_counter'
 require_relative 'ddtelemetry/basic_summary'
 
+require_relative 'ddtelemetry/metric'
 require_relative 'ddtelemetry/counter'
 require_relative 'ddtelemetry/summary'
 
