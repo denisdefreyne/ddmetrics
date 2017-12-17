@@ -53,9 +53,9 @@ class Cache
 
   def [](key)
     if @map.key?(key)
-      @counter.increment([:get, :hit])
+      @counter.increment(:get_hit)
     else
-      @counter.increment([:get, :miss])
+      @counter.increment(:get_miss)
     end
 
     @map[key]
@@ -76,20 +76,23 @@ cache['greeting']
 cache['greeting']
 ```
 
-Finally, print the recorded telemetry values:
+Finally, get the recorded telemetry values:
 
 ```ruby
-p cache.counter.value(:set)
-# => 1
-
-p cache.counter.value([:get, :hit])
-# => 3
-
-p cache.counter.value([:get, :miss])
-# => 2
+cache.counter.get(:set)      # => 1
+cache.counter.get(:get_hit)  # => 3
+cache.counter.get(:get_miss) # => 2
 ```
 
-TODO: Replace the above to use `#to_s` instead
+Or even print all stats:
+
+```
+         │ count
+─────────┼──────
+get_miss │     2
+     set │     1
+ get_hit │     3
+```
 
 ## Installation
 
