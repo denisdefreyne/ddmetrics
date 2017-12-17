@@ -75,4 +75,25 @@ describe DDTelemetry::LabelledSummary do
       expect(subject.quantile(0.99, :haml)).to be_within(0.000001).of(5.3)
     end
   end
+
+  describe '#to_s' do
+    subject { summary.to_s }
+
+    before do
+      summary.observe(2.1, :erb)
+      summary.observe(4.1, :erb)
+      summary.observe(5.3, :haml)
+    end
+
+    it 'returns table' do
+      expected = <<~TABLE
+             │ count     min     .50     .90     .95     max     tot
+        ─────┼──────────────────────────────────────────────────────
+         erb │     2   2.10s   3.10s   3.90s   4.00s   4.10s   6.20s
+        haml │     1   5.30s   5.30s   5.30s   5.30s   5.30s   5.30s
+      TABLE
+
+      expect(subject.strip).to eq(expected.strip)
+    end
+  end
 end

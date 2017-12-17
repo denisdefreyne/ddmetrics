@@ -31,5 +31,9 @@ module DDTelemetry
     def map
       @counters.map { |(label, counter)| yield(label, counter) }
     end
+
+    def to_s
+      DDTelemetry::Printer.new.counter_to_s(self)
+    end
   end
 end

@@ -91,4 +91,25 @@ describe DDTelemetry::LabelledCounter do
       it { is_expected.to eq [[:erb, 2], [:haml, 1]] }
     end
   end
+
+  describe '#to_s' do
+    subject { counter.to_s }
+
+    before do
+      counter.increment(:erb)
+      counter.increment(:erb)
+      counter.increment(:haml)
+    end
+
+    it 'returns table' do
+      expected = <<~TABLE
+             │ count
+        ─────┼──────
+         erb │     2
+        haml │     1
+      TABLE
+
+      expect(subject.strip).to eq(expected.strip)
+    end
+  end
 end

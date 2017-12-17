@@ -26,6 +26,10 @@ module DDTelemetry
       @summaries.map { |(label, summary)| yield(label, summary) }
     end
 
+    def to_s
+      DDTelemetry::Printer.new.summary_to_s(self)
+    end
+
     # TODO: add quantiles(fraction)
     # TODO: add min(label)
     # TODO: add mins

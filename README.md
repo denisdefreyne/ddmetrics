@@ -151,7 +151,24 @@ To observe a value, call `#observe` with a label, along with the value to observ
 summary.observe(:weather_api, 1.07)
 ```
 
-### Miscellaneous
+## Printing metrics
+
+To print a metric, use `#to_s`. For example:
+
+```ruby
+puts summary
+```
+
+Output:
+
+```
+     │ count     min     .50     .90     .95     max     tot
+─────┼──────────────────────────────────────────────────────
+ erb │     2   2.10s   3.10s   3.90s   4.00s   4.10s   6.20s
+haml │     1   5.30s   5.30s   5.30s   5.30s   5.30s   5.30s
+```
+
+### Stopwatch
 
 The `DDTelemetry::Stopwatch` class can be used to measure durations. Use `#start` and `#stop` to start and stop the stopwatch, respectively, and `#duration` to read the value of the stopwatch:
 

@@ -18,3 +18,4 @@ require_relative 'ddtelemetry/registry'
 require_relative 'ddtelemetry/stopwatch'
 
 require_relative 'ddtelemetry/table'
+require_relative 'ddtelemetry/printer'
