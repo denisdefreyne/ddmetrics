@@ -22,7 +22,7 @@ module DDTelemetry
     end
 
     def avg
-      sum / count
+      sum.to_f / count
     end
 
     def min

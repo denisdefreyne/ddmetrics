@@ -64,4 +64,22 @@ describe DDTelemetry::Stats do
       expect(subject.quantile(0.99)).to be_within(0.000001).of(4.08)
     end
   end
+
+  context 'integer values' do
+    let(:values) { [1, 2] }
+
+    its(:count) { is_expected.to be_within(0.000001).of(2) }
+    its(:sum) { is_expected.to be_within(0.000001).of(3) }
+    its(:avg) { is_expected.to be_within(0.000001).of(1.5) }
+    its(:min) { is_expected.to be_within(0.000001).of(1) }
+    its(:max) { is_expected.to be_within(0.000001).of(2) }
+
+    it 'has proper quantiles' do
+      expect(subject.quantile(0.00)).to be_within(0.000001).of(1.0)
+      expect(subject.quantile(0.25)).to be_within(0.000001).of(1.25)
+      expect(subject.quantile(0.50)).to be_within(0.000001).of(1.5)
+      expect(subject.quantile(0.90)).to be_within(0.000001).of(1.9)
+      expect(subject.quantile(0.99)).to be_within(0.000001).of(1.99)
+    end
+  end
 end
