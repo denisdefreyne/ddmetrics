@@ -14,8 +14,8 @@ module DDTelemetry
       basic_counter_for(label).value
     end
 
-    def map
-      @counters.map { |(label, counter)| yield(label, counter) }
+    def labels
+      @counters.keys
     end
 
     def to_s

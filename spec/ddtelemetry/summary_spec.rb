@@ -36,17 +36,16 @@ describe DDTelemetry::Summary do
     its(:count) { is_expected.to eq(2) }
   end
 
-  describe '#map' do
+  describe '#labels' do
+    subject { summary.labels }
+
     before do
-      subject.observe(2.1, :erb)
-      subject.observe(4.1, :erb)
-      subject.observe(5.3, :haml)
+      summary.observe(2.1, :erb)
+      summary.observe(4.1, :erb)
+      summary.observe(5.3, :haml)
     end
 
-    it 'yields label and summary' do
-      res = subject.map { |label, summary| [label, summary.values] }
-      expect(res).to eql([[:erb, [2.1, 4.1]], [:haml, [5.3]]])
-    end
+    it { is_expected.to contain_exactly(:haml, :erb) }
   end
 
   describe '#to_s' do

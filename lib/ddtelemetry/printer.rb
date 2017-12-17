@@ -12,11 +12,11 @@ module DDTelemetry
 
     private
 
-    def table_for_summary(labelled_summary)
+    def table_for_summary(summary)
       headers = ['', 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
 
-      rows = labelled_summary.map do |label, summary|
-        stats = DDTelemetry::Stats.new(summary.values)
+      rows = summary.labels.map do |label|
+        stats = summary.get_stats(label)
 
         count = stats.count
         min   = stats.min
@@ -32,11 +32,11 @@ module DDTelemetry
       [headers] + rows
     end
 
-    def table_for_counter(labelled_counter)
+    def table_for_counter(counter)
       headers = ['', 'count']
 
-      rows = labelled_counter.map do |label, counter|
-        [label.to_s, counter.value.to_s]
+      rows = counter.labels.map do |label|
+        [label.to_s, counter.get(label).to_s]
       end
 
       [headers] + rows

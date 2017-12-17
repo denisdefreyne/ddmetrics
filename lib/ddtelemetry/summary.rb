@@ -18,8 +18,8 @@ module DDTelemetry
       DDTelemetry::Stats.new(get(label))
     end
 
-    def map
-      @summaries.map { |(label, summary)| yield(label, summary) }
+    def labels
+      @summaries.keys
     end
 
     def to_s

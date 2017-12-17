@@ -45,27 +45,16 @@ describe DDTelemetry::Counter do
     end
   end
 
-  describe '#map' do
-    subject { counter.map { |label, counter| [label, counter.value] } }
+  describe '#labels' do
+    subject { counter.labels }
 
-    context 'not incremented' do
-      it { is_expected.to be_empty }
+    before do
+      counter.increment(:erb)
+      counter.increment(:erb)
+      counter.increment(:haml)
     end
 
-    context 'incremented once' do
-      before { counter.increment(:erb) }
-      it { is_expected.to eq [[:erb, 1]] }
-    end
-
-    context 'both incremental multiple times' do
-      before do
-        counter.increment(:erb)
-        counter.increment(:erb)
-        counter.increment(:haml)
-      end
-
-      it { is_expected.to eq [[:erb, 2], [:haml, 1]] }
-    end
+    it { is_expected.to contain_exactly(:haml, :erb) }
   end
 
   describe '#to_s' do
