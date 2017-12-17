@@ -138,6 +138,13 @@ To increment a counter, call `#increment` with a label:
 counter.increment(:file_cache)
 ```
 
+To get the value for a certain label, use `#get`:
+
+```ruby
+counter.get(:file_cache)
+# => 1
+```
+
 ### Summaries
 
 To create a summary, instantiate `DDTelemetry::Summary`:
@@ -149,7 +156,16 @@ summary = DDTelemetry::Summary.new
 To observe a value, call `#observe` with a label, along with the value to observe:
 
 ```ruby
+summary.observe(:weather_api, 0.88)
 summary.observe(:weather_api, 1.07)
+summary.observe(:weather_api, 0.91)
+```
+
+To get the list of observations for a certain label, use `#get`:
+
+```ruby
+summary.get(:weather_api)
+# => [0.88, 1.07, 0.91]
 ```
 
 ## Printing metrics
