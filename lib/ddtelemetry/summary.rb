@@ -11,11 +11,8 @@ module DDTelemetry
     end
 
     def get(label)
-      basic_summary_for(label).values
-    end
-
-    def get_stats(label)
-      DDTelemetry::Stats.new(get(label))
+      values = basic_summary_for(label).values
+      DDTelemetry::Stats.new(values)
     end
 
     def labels

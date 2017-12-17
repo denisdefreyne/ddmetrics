@@ -16,7 +16,7 @@ module DDTelemetry
       headers = ['', 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
 
       rows = summary.labels.map do |label|
-        stats = summary.get_stats(label)
+        stats = summary.get(label)
 
         count = stats.count
         min   = stats.min

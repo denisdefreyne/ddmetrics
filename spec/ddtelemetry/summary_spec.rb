@@ -6,24 +6,6 @@ describe DDTelemetry::Summary do
   describe '#get' do
     subject { summary.get(:erb) }
 
-    context 'empty summary' do
-      it { is_expected.to eq([]) }
-    end
-
-    context 'one observation with that label' do
-      before { summary.observe(0.1, :erb) }
-      it { is_expected.to eq([0.1]) }
-    end
-
-    context 'one observation with a different label' do
-      before { summary.observe(0.1, :haml) }
-      it { is_expected.to eq([]) }
-    end
-  end
-
-  describe '#get_stats' do
-    subject { summary.get_stats(:erb) }
-
     before do
       summary.observe(2.1, :erb)
       summary.observe(4.1, :erb)

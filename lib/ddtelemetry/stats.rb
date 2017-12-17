@@ -12,6 +12,10 @@ module DDTelemetry
       @values = values
     end
 
+    def inspect
+      "<#{self.class} count=#{count}>"
+    end
+
     def count
       @values.size
     end

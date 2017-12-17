@@ -168,31 +168,11 @@ summary.observe(:weather_api, 1.07)
 summary.observe(:weather_api, 0.91)
 ```
 
-To get the list of observations for a certain label, use `#get`:
+To get the list of observations for a certain label, use `#get`, which will return a `DDTelemetry::Stats` instance:
 
 ```ruby
 summary.get(:weather_api)
-# => [0.88, 1.07, 0.91]
-```
-
-### Statistics
-
-To calculate descriptive statistics for a collection of values, construct a `DDTelemetry::Stats` instance with the list of values:
-
-```ruby
-stats = DDTelemetry::Stats.new(summary.get(:weather_api))
-stats.min           # => 0.88
-stats.max           # => 1.07
-stats.quantile(0.5) # => 0.91
-```
-
-You can use `Summary#get_stats` to get a `Stats` object directly from a summary:
-
-```ruby
-stats = summary.get_stats(:weather_api)
-stats.min           # => 0.88
-stats.max           # => 1.07
-stats.quantile(0.5) # => 0.91
+# => <DDTelemetry::Stats>
 ```
 
 The following methods are available on `DDTelemetry::Stats`:
