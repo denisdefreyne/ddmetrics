@@ -64,7 +64,7 @@ end
 Let’s construct a cache (with telemetry) and exercise it:
 
 ```ruby
-telemetry = DDTelemetry::Registry.new
+telemetry = DDTelemetry.new
 cache = Cache.new(telemetry)
 
 cache['greeting']
@@ -106,7 +106,76 @@ Or install it yourself as:
 
 ## Usage
 
-TODO
+_DDTelemetry_ provides two metric types:
+
+* A **counter** is an integer metric that only ever increases. Examples: cache hits, number of files written, …
+
+* A **summary** records observations, and provides functionality for describing the distribution of the observations through quantiles. Examples: outgoing request durations, size of written files, …
+
+Each metric is recorded with a label, which is a free-form object that is useful to further refine the kind of data that is being recorded. For example:
+
+```ruby
+telemetry.counter(:cache_hits).increment(:file_cache)
+telemetry.summary(:request_durations).observe(:weather_api, 1.07)
+```
+
+NOTE: Labels will likely change to become key-value pairs in a future version of DDTelemetry.
+
+### Counters
+
+A counter is created using `#counter`, passing in the name of the counter:
+
+```ruby
+telemetry = DDTelemetry.new
+counter = telemetry.counter(:cache_hits)
+```
+
+To increment a counter, call `#increment` with a label:
+
+```ruby
+counter.increment(:file_cache)
+```
+
+### Summaries
+
+A summary is created using `#summary`, passing in the name of the summary:
+
+```ruby
+telemetry = DDTelemetry.new
+summary = telemetry.summary(:request_durations)
+```
+
+To observe a value, call `#observe` with a label, along with the value to observe:
+
+```ruby
+summary.observe(:weather_api, 1.07)
+```
+
+### Miscellaneous
+
+The `DDTelemetry::Stopwatch` class can be used to measure durations. Use `#start` and `#stop` to start and stop the stopwatch, respectively, and `#duration` to read the value of the stopwatch:
+
+```ruby
+stopwatch = DDTelemetry::Stopwatch.new
+
+stopwatch.start
+sleep 1
+stopwatch.stop
+puts "That took #{stopwatch.duration}s."
+# Output: That took 1.006831s.
+```
+
+A stopwatch, once created, will never reset its duration. Running the stopwatch again will add to the existing duration:
+
+```ruby
+stopwatch.start
+sleep 1
+stopwatch.stop
+puts "That took #{stopwatch.duration}s."
+# Output: That took 2.012879s.
+```
+
+You can query whether or not a stopwatch is running using `#running?`; `#stopped?` is the opposite of `#running?`.
 
 ## Development
 
