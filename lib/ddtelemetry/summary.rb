@@ -2,54 +2,40 @@
 
 module DDTelemetry
   class Summary
-    class EmptySummaryError < StandardError
-      def message
-        'Cannot calculate quantile for empty summary'
-      end
-    end
-
     def initialize
-      @values = []
+      @summaries = {}
     end
 
-    def observe(value)
-      @values << value
-      @sorted_values = nil
+    def observe(value, label)
+      get(label).observe(value)
     end
 
-    def count
-      @values.size
+    def get(label)
+      @summaries.fetch(label) { @summaries[label] = BasicSummary.new }
     end
 
-    def sum
-      raise EmptySummaryError if @values.empty?
-      @values.reduce(:+)
+    def empty?
+      @summaries.empty?
     end
 
-    def avg
-      sum / count
+    def quantile(fraction, label)
+      get(label).quantile(fraction)
     end
 
-    def min
-      quantile(0.0)
+    def map
+      @summaries.map { |(label, summary)| yield(label, summary) }
     end
 
-    def max
-      quantile(1.0)
+    def to_s
+      DDTelemetry::Printer.new.summary_to_s(self)
     end
 
-    def quantile(fraction)
-      raise EmptySummaryError if @values.empty?
-
-      target = (@values.size - 1) * fraction.to_f
-      interp = target % 1.0
-      sorted_values[target.floor] * (1.0 - interp) + sorted_values[target.ceil] * interp
-    end
-
-    private
-
-    def sorted_values
-      @sorted_values ||= @values.sort
-    end
+    # TODO: add quantiles(fraction)
+    # TODO: add min(label)
+    # TODO: add mins
+    # TODO: add max(label)
+    # TODO: add maxs
+    # TODO: add sum(label)
+    # TODO: add sums
   end
 end

@@ -8,11 +8,11 @@ module DDTelemetry
     end
 
     def counter(name)
-      @counters.fetch(name) { @counters[name] = LabelledCounter.new }
+      @counters.fetch(name) { @counters[name] = Counter.new }
     end
 
     def summary(name)
-      @summaries.fetch(name) { @summaries[name] = LabelledSummary.new }
+      @summaries.fetch(name) { @summaries[name] = Summary.new }
     end
   end
 end
