@@ -21,6 +21,21 @@ describe DDTelemetry::Summary do
     end
   end
 
+  describe '#get_stats' do
+    subject { summary.get_stats(:erb) }
+
+    before do
+      summary.observe(2.1, :erb)
+      summary.observe(4.1, :erb)
+      summary.observe(5.3, :haml)
+    end
+
+    it { is_expected.to be_a(DDTelemetry::Stats) }
+
+    its(:sum) { is_expected.to eq(2.1 + 4.1) }
+    its(:count) { is_expected.to eq(2) }
+  end
+
   describe '#map' do
     before do
       subject.observe(2.1, :erb)

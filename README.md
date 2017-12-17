@@ -168,7 +168,36 @@ summary.get(:weather_api)
 # => [0.88, 1.07, 0.91]
 ```
 
-## Printing metrics
+### Statistics
+
+To calculate descriptive statistics for a collection of values, construct a `DDTelemetry::Stats` instance with the list of values:
+
+```ruby
+stats = DDTelemetry::Stats.new(summary.get(:weather_api))
+stats.min           # => 0.88
+stats.max           # => 1.07
+stats.quantile(0.5) # => 0.91
+```
+
+You can use `Summary#get_stats` to get a `Stats` object directly from a summary:
+
+```ruby
+stats = summary.get_stats(:weather_api)
+stats.min           # => 0.88
+stats.max           # => 1.07
+stats.quantile(0.5) # => 0.91
+```
+
+The following methods are available on `DDTelemetry::Stats`:
+
+* `#count`: returns the number of values
+* `#sum`: returns the sum of all values
+* `#avg`: returns the average of all values
+* `#min`: returns the minimum value
+* `#max`: returns the maximum value
+* `#quantile(fraction)`: returns the quantile at the given fraction (0.0 – 1.0)
+
+### Printing metrics
 
 To print a metric, use `#to_s`. For example:
 

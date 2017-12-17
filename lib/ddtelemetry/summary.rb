@@ -14,6 +14,10 @@ module DDTelemetry
       basic_summary_for(label).values
     end
 
+    def get_stats(label)
+      DDTelemetry::Stats.new(get(label))
+    end
+
     def map
       @summaries.map { |(label, summary)| yield(label, summary) }
     end
