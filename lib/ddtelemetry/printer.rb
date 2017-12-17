@@ -16,13 +16,15 @@ module DDTelemetry
       headers = ['', 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
 
       rows = labelled_summary.map do |label, summary|
-        count = summary.count
-        min   = summary.min
-        p50   = summary.quantile(0.50)
-        p90   = summary.quantile(0.90)
-        p95   = summary.quantile(0.95)
-        tot   = summary.sum
-        max   = summary.max
+        stats = DDTelemetry::Stats.new(summary.values)
+
+        count = stats.count
+        min   = stats.min
+        p50   = stats.quantile(0.50)
+        p90   = stats.quantile(0.90)
+        p95   = stats.quantile(0.95)
+        tot   = stats.sum
+        max   = stats.max
 
         [label.to_s, count.to_s] + [min, p50, p90, p95, max, tot].map { |r| format('%4.2f', r) }
       end
