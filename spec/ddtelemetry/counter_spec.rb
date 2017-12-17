@@ -57,6 +57,22 @@ describe DDTelemetry::Counter do
     it { is_expected.to contain_exactly(:haml, :erb) }
   end
 
+  describe '#each' do
+    subject do
+      {}.tap do |res|
+        counter.each { |label, count| res[label] = count }
+      end
+    end
+
+    before do
+      counter.increment(:erb)
+      counter.increment(:erb)
+      counter.increment(:haml)
+    end
+
+    it { is_expected.to eq(haml: 1, erb: 2) }
+  end
+
   describe '#to_s' do
     subject { counter.to_s }
 

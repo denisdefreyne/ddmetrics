@@ -30,6 +30,22 @@ describe DDTelemetry::Summary do
     it { is_expected.to contain_exactly(:haml, :erb) }
   end
 
+  describe '#each' do
+    subject do
+      {}.tap do |res|
+        summary.each { |label, stats| res[label] = stats.avg.round(2) }
+      end
+    end
+
+    before do
+      summary.observe(2.1, :erb)
+      summary.observe(4.1, :erb)
+      summary.observe(5.3, :haml)
+    end
+
+    it { is_expected.to eq(haml: 5.3, erb: 3.1) }
+  end
+
   describe '#to_s' do
     subject { summary.to_s }
 
