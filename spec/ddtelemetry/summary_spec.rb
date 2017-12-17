@@ -7,17 +7,17 @@ describe DDTelemetry::Summary do
     subject { summary.get(:erb) }
 
     context 'empty summary' do
-      its(:values) { is_expected.to eq([]) }
+      it { is_expected.to eq([]) }
     end
 
     context 'one observation with that label' do
       before { summary.observe(0.1, :erb) }
-      its(:values) { is_expected.to eq([0.1]) }
+      it { is_expected.to eq([0.1]) }
     end
 
     context 'one observation with a different label' do
       before { summary.observe(0.1, :haml) }
-      its(:values) { is_expected.to eq([]) }
+      it { is_expected.to eq([]) }
     end
   end
 

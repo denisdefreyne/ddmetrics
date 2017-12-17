@@ -7,11 +7,11 @@ module DDTelemetry
     end
 
     def observe(value, label)
-      get(label).observe(value)
+      basic_summary_for(label).observe(value)
     end
 
     def get(label)
-      @summaries.fetch(label) { @summaries[label] = BasicSummary.new }
+      basic_summary_for(label).values
     end
 
     def map
@@ -20,6 +20,11 @@ module DDTelemetry
 
     def to_s
       DDTelemetry::Printer.new.summary_to_s(self)
+    end
+
+    # @api private
+    def basic_summary_for(label)
+      @summaries.fetch(label) { @summaries[label] = BasicSummary.new }
     end
   end
 end

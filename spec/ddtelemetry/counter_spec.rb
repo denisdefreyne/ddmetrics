@@ -5,8 +5,8 @@ describe DDTelemetry::Counter do
 
   describe 'new counter' do
     it 'starts at 0' do
-      expect(subject.get(:erb).value).to eq(0)
-      expect(subject.get(:haml).value).to eq(0)
+      expect(subject.get(:erb)).to eq(0)
+      expect(subject.get(:haml)).to eq(0)
     end
   end
 
@@ -15,15 +15,15 @@ describe DDTelemetry::Counter do
 
     it 'increments the matching value' do
       expect { subject }
-        .to change { counter.get(:erb).value }
+        .to change { counter.get(:erb) }
         .from(0)
         .to(1)
     end
 
     it 'does not increment any other value' do
-      expect(counter.get(:haml).value).to eq(0)
+      expect(counter.get(:haml)).to eq(0)
       expect { subject }
-        .not_to change { counter.get(:haml).value }
+        .not_to change { counter.get(:haml) }
     end
   end
 
@@ -31,17 +31,17 @@ describe DDTelemetry::Counter do
     subject { counter.get(:erb) }
 
     context 'not incremented' do
-      its(:value) { is_expected.to eq(0) }
+      it { is_expected.to eq(0) }
     end
 
     context 'incremented' do
       before { counter.increment(:erb) }
-      its(:value) { is_expected.to eq(1) }
+      it { is_expected.to eq(1) }
     end
 
     context 'other incremented' do
       before { counter.increment(:haml) }
-      its(:value) { is_expected.to eq(0) }
+      it { is_expected.to eq(0) }
     end
   end
 

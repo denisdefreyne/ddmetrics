@@ -7,11 +7,11 @@ module DDTelemetry
     end
 
     def increment(label)
-      get(label).increment
+      basic_counter_for(label).increment
     end
 
     def get(label)
-      @counters.fetch(label) { @counters[label] = BasicCounter.new }
+      basic_counter_for(label).value
     end
 
     def map
@@ -20,6 +20,11 @@ module DDTelemetry
 
     def to_s
       DDTelemetry::Printer.new.counter_to_s(self)
+    end
+
+    # @api private
+    def basic_counter_for(label)
+      @counters.fetch(label) { @counters[label] = BasicCounter.new }
     end
   end
 end
