@@ -2,6 +2,8 @@
 
 module DDTelemetry
   class Metric
+    include Enumerable
+
     def initialize
       @basic_metrics = {}
     end

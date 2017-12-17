@@ -71,6 +71,11 @@ describe DDTelemetry::Counter do
     end
 
     it { is_expected.to eq(haml: 1, erb: 2) }
+
+    it 'is enumerable' do
+      sum = counter.sum { |_label, count| count }
+      expect(sum).to eq(3)
+    end
   end
 
   describe '#to_s' do
