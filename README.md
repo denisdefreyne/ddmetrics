@@ -6,7 +6,7 @@
 
 # DDTelemetry
 
-_DDTelemetry_ provides in-process, non-timeseries telemetry for short-running Ruby processes.
+_DDTelemetry_ is a Ruby library for recording and analysing measurements in short-running Ruby processes.
 
 ⚠️ This project is **experimental** and should not be used in production yet.
 
