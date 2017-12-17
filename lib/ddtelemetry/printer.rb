@@ -24,7 +24,7 @@ module DDTelemetry
         tot   = summary.sum
         max   = summary.max
 
-        [label.to_s, count.to_s] + [min, p50, p90, p95, max, tot].map { |r| "#{format('%4.2f', r)}s" }
+        [label.to_s, count.to_s] + [min, p50, p90, p95, max, tot].map { |r| "#{format('%4.2f', r)}" }
       end
 
       [headers] + rows
