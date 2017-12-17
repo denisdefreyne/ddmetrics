@@ -2,8 +2,6 @@
 
 module DDTelemetry
   class Stopwatch
-    attr_reader :duration
-
     class AlreadyRunningError < StandardError
       def message
         'Cannot start, because stopwatch is already running'
@@ -13,6 +11,12 @@ module DDTelemetry
     class NotRunningError < StandardError
       def message
         'Cannot stop, because stopwatch is not running'
+      end
+    end
+
+    class StillRunningError < StandardError
+      def message
+        'Cannot get duration, because stopwatch is still running'
       end
     end
 
@@ -30,6 +34,11 @@ module DDTelemetry
       raise NotRunningError unless running?
       @duration += (Time.now - @last_start)
       @last_start = nil
+    end
+
+    def duration
+      raise StillRunningError if running?
+      @duration
     end
 
     def running?

@@ -9,8 +9,6 @@ describe DDTelemetry::Stopwatch do
     expect(stopwatch.duration).to eq(0.0)
   end
 
-  # TODO: if running, raise error when asking for #duration
-
   it 'records correct duration after start+stop' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
     stopwatch.start
@@ -67,5 +65,14 @@ describe DDTelemetry::Stopwatch do
 
     expect(stopwatch).not_to be_running
     expect(stopwatch).to be_stopped
+  end
+
+  it 'errors when getting duration while running' do
+    stopwatch.start
+    expect { stopwatch.duration }
+      .to raise_error(
+        DDTelemetry::Stopwatch::StillRunningError,
+        'Cannot get duration, because stopwatch is still running',
+      )
   end
 end
