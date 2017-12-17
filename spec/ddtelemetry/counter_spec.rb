@@ -73,8 +73,8 @@ describe DDTelemetry::Counter do
     it { is_expected.to eq(haml: 1, erb: 2) }
 
     it 'is enumerable' do
-      sum = counter.sum { |_label, count| count }
-      expect(sum).to eq(3)
+      expect(counter.map { |_label, count| count }.sort)
+        .to eq([1, 2])
     end
   end
 

@@ -46,8 +46,8 @@ describe DDTelemetry::Summary do
     it { is_expected.to eq(haml: 5.3, erb: 3.1) }
 
     it 'is enumerable' do
-      sum = summary.sum { |_label, stats| stats.sum }
-      expect(sum).to eq(2.1 + 4.1 + 5.3)
+      expect(summary.map { |_label, stats| stats.sum }.sort)
+        .to eq([5.3, 2.1 + 4.1])
     end
   end
 
