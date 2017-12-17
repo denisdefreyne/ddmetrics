@@ -3,24 +3,6 @@
 describe DDTelemetry::Summary do
   subject(:summary) { described_class.new }
 
-  describe '#empty?' do
-    subject { summary.empty? }
-
-    context 'empty summary' do
-      it { is_expected.to be }
-    end
-
-    context 'some observations' do
-      before do
-        summary.observe(7.2, :erb)
-        summary.observe(5.3, :erb)
-        summary.observe(3.0, :haml)
-      end
-
-      it { is_expected.not_to be }
-    end
-  end
-
   describe '#get' do
     subject { summary.get(:erb) }
 

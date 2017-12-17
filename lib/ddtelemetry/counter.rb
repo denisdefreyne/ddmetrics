@@ -14,20 +14,6 @@ module DDTelemetry
       @counters.fetch(label) { @counters[label] = BasicCounter.new }
     end
 
-    def empty?
-      @counters.empty?
-    end
-
-    def value(label)
-      get(label).value
-    end
-
-    def values
-      @counters.each_with_object({}) do |(label, counter), res|
-        res[label] = counter.value
-      end
-    end
-
     def map
       @counters.map { |(label, counter)| yield(label, counter) }
     end
