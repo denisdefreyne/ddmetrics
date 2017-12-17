@@ -10,6 +10,6 @@ group :devel do
   gem 'rake'
   gem 'rspec'
   gem 'rspec-its'
-  gem 'rubocop', '~> 0.51', '< 0.52'
+  gem 'rubocop', '~> 0.52'
   gem 'timecop', '~> 0.9'
 end

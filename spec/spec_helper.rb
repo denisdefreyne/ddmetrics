@@ -14,6 +14,6 @@ require 'timecop'
 
 RSpec.configure do |c|
   c.fuubar_progress_bar_options = {
-    format: '%c/%C |<%b>%i| %p%%',
+    format: '%c/%C |<%b>%i| %p%%', # rubocop:disable Style/FormatStringToken
   }
 end
