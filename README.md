@@ -32,28 +32,30 @@ class Cache
 end
 ```
 
-To start instrumenting this code, require `ddtelemetry`, pass a telemetry instance into the constructor, and record some metrics:
+To start instrumenting this code, require `ddtelemetry`, create a counter, and record some metrics:
 
 ```ruby
 require 'ddtelemetry'
 
 class Cache
-  def initialize(telemetry)
-    @telemetry = telemetry
+  attr_reader :counter
+
+  def initialize
     @map = {}
+    @counter = DDTelemetry::Counter.new
   end
 
   def []=(key, value)
-    @telemetry.counter(:cache).increment(:set)
+    @counter.increment(:set)
 
     @map[key] = value
   end
 
   def [](key)
     if @map.key?(key)
-      @telemetry.counter(:cache).increment([:get, :hit])
+      @counter.increment([:get, :hit])
     else
-      @telemetry.counter(:cache).increment([:get, :miss])
+      @counter.increment([:get, :miss])
     end
 
     @map[key]
@@ -61,11 +63,10 @@ class Cache
 end
 ```
 
-Let’s construct a cache (with telemetry) and exercise it:
+Let’s construct a cache and exercise it:
 
 ```ruby
-telemetry = DDTelemetry.new
-cache = Cache.new(telemetry)
+cache = Cache.new
 
 cache['greeting']
 cache['greeting']
@@ -78,15 +79,17 @@ cache['greeting']
 Finally, print the recorded telemetry values:
 
 ```ruby
-p telemetry.counter(:cache).value(:set)
+p cache.counter.value(:set)
 # => 1
 
-p telemetry.counter(:cache).value([:get, :hit])
+p cache.counter.value([:get, :hit])
 # => 3
 
-p telemetry.counter(:cache).value([:get, :miss])
+p cache.counter.value([:get, :miss])
 # => 2
 ```
+
+TODO: Replace the above to use `#to_s` instead
 
 ## Installation
 
@@ -115,19 +118,18 @@ _DDTelemetry_ provides two metric types:
 Each metric is recorded with a label, which is a free-form object that is useful to further refine the kind of data that is being recorded. For example:
 
 ```ruby
-telemetry.counter(:cache_hits).increment(:file_cache)
-telemetry.summary(:request_durations).observe(:weather_api, 1.07)
+cache_hits_counter.increment(:file_cache)
+request_durations_summary.observe(:weather_api, 1.07)
 ```
 
 NOTE: Labels will likely change to become key-value pairs in a future version of DDTelemetry.
 
 ### Counters
 
-A counter is created using `#counter`, passing in the name of the counter:
+To create a counter, instantiate `DDTelemetry::Counter`:
 
 ```ruby
-telemetry = DDTelemetry.new
-counter = telemetry.counter(:cache_hits)
+counter = DDTelemetry::Counter.new
 ```
 
 To increment a counter, call `#increment` with a label:
@@ -138,11 +140,10 @@ counter.increment(:file_cache)
 
 ### Summaries
 
-A summary is created using `#summary`, passing in the name of the summary:
+To create a summary, instantiate `DDTelemetry::Summary`:
 
 ```ruby
-telemetry = DDTelemetry.new
-summary = telemetry.summary(:request_durations)
+summary = DDTelemetry::Summary.new
 ```
 
 To observe a value, call `#observe` with a label, along with the value to observe:
@@ -156,8 +157,7 @@ summary.observe(:weather_api, 1.07)
 To print a metric, use `#to_s`. For example:
 
 ```ruby
-telemetry = DDTelemetry.new
-summary = telemetry.summary(:request_durations)
+summary = DDTelemetry::Summary.new
 
 summary.observe(2.1, :erb)
 summary.observe(4.1, :erb)
