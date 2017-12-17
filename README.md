@@ -156,6 +156,13 @@ summary.observe(:weather_api, 1.07)
 To print a metric, use `#to_s`. For example:
 
 ```ruby
+telemetry = DDTelemetry.new
+summary = telemetry.summary(:request_durations)
+
+summary.observe(2.1, :erb)
+summary.observe(4.1, :erb)
+summary.observe(5.3, :haml)
+
 puts summary
 ```
 
