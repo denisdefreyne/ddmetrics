@@ -86,6 +86,10 @@ cache.counter.get(:get_miss) # => 2
 
 Or even print all stats:
 
+```ruby
+puts cache.counter
+```
+
 ```
          │ count
 ─────────┼──────
