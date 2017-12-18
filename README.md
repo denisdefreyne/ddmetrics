@@ -8,8 +8,6 @@
 
 _DDTelemetry_ is a Ruby library for recording and analysing measurements in short-running Ruby processes.
 
-⚠️ This project is **experimental** and should not be used in production yet.
-
 If you are looking for a full-featured timeseries monitoring system, look no further than [Prometheus](https://prometheus.io/).
 
 ## Example
