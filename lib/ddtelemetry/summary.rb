@@ -3,10 +3,12 @@
 module DDTelemetry
   class Summary < Metric
     def observe(value, label)
+      validate_label(label)
       basic_metric_for(label, BasicSummary).observe(value)
     end
 
     def get(label)
+      validate_label(label)
       values = basic_metric_for(label, BasicSummary).values
       DDTelemetry::Stats.new(values)
     end

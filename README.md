@@ -44,16 +44,16 @@ class Cache
   end
 
   def []=(key, value)
-    @counter.increment(:set)
+    @counter.increment(type: :set)
 
     @map[key] = value
   end
 
   def [](key)
     if @map.key?(key)
-      @counter.increment(:get_hit)
+      @counter.increment(type: :get_hit)
     else
-      @counter.increment(:get_miss)
+      @counter.increment(type: :get_miss)
     end
 
     @map[key]
@@ -77,9 +77,9 @@ cache['greeting']
 Finally, get the recorded telemetry values:
 
 ```ruby
-cache.counter.get(:set)      # => 1
-cache.counter.get(:get_hit)  # => 3
-cache.counter.get(:get_miss) # => 2
+cache.counter.get(type: :set)      # => 1
+cache.counter.get(type: :get_hit)  # => 3
+cache.counter.get(type: :get_miss) # => 2
 ```
 
 Or even print all stats:
@@ -89,11 +89,11 @@ puts cache.counter
 ```
 
 ```
-         │ count
-─────────┼──────
-get_miss │     2
-     set │     1
- get_hit │     3
+              │ count
+──────────────┼──────
+type=get_miss │     2
+     type=set │     1
+ type=get_hit │     3
 ```
 
 ## Installation
@@ -120,14 +120,12 @@ _DDTelemetry_ provides two metric types:
 
 * A **summary** records observations, and provides functionality for describing the distribution of the observations through quantiles. Examples: outgoing request durations, size of written files, …
 
-Each metric is recorded with a label, which is a free-form object that is useful to further refine the kind of data that is being recorded. For example:
+Each metric is recorded with a label, which is a hash that is useful to further refine the kind of data that is being recorded. For example:
 
 ```ruby
-cache_hits_counter.increment(:file_cache)
-request_durations_summary.observe(:weather_api, 1.07)
+cache_hits_counter.increment(target: :file_cache)
+request_durations_summary.observe(1.07, api: :weather)
 ```
-
-NOTE: Labels will likely change to become key-value pairs in a future version of DDTelemetry.
 
 ### Counters
 
@@ -140,13 +138,13 @@ counter = DDTelemetry::Counter.new
 To increment a counter, call `#increment` with a label:
 
 ```ruby
-counter.increment(:file_cache)
+counter.increment(target: :file_cache)
 ```
 
 To get the value for a certain label, use `#get`:
 
 ```ruby
-counter.get(:file_cache)
+counter.get(target: :file_cache)
 # => 1
 ```
 
@@ -161,15 +159,15 @@ summary = DDTelemetry::Summary.new
 To observe a value, call `#observe` with the value to observe, along with a label:
 
 ```ruby
-summary.observe(0.88, :weather_api)
-summary.observe(1.07, :weather_api)
-summary.observe(0.91, :weather_api)
+summary.observe(0.88, api: :weather)
+summary.observe(1.07, api: :weather)
+summary.observe(0.91, api: :weather)
 ```
 
 To get the list of observations for a certain label, use `#get`, which will return a `DDTelemetry::Stats` instance:
 
 ```ruby
-summary.get(:weather_api)
+summary.get(api: :weather)
 # => <DDTelemetry::Stats>
 ```
 
@@ -189,9 +187,9 @@ To print a metric, use `#to_s`. For example:
 ```ruby
 summary = DDTelemetry::Summary.new
 
-summary.observe(2.1, :erb)
-summary.observe(4.1, :erb)
-summary.observe(5.3, :haml)
+summary.observe(2.1, filter: :erb)
+summary.observe(4.1, filter: :erb)
+summary.observe(5.3, filter: :haml)
 
 puts summary
 ```
@@ -199,10 +197,10 @@ puts summary
 Output:
 
 ```
-     │ count    min    .50    .90    .95    max    tot
-─────┼────────────────────────────────────────────────
- erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
-haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
+            │ count    min    .50    .90    .95    max    tot
+────────────┼────────────────────────────────────────────────
+ filter=erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
+filter=haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
 ```
 
 ### Stopwatch

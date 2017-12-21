@@ -3,13 +3,23 @@
 describe DDTelemetry::Summary do
   subject(:summary) { described_class.new }
 
+  describe '#observe' do
+    context 'non-hash label' do
+      subject { summary.observe(1.23, 'WRONG UGH') }
+
+      it 'errors' do
+        expect { subject }.to raise_error(ArgumentError, 'label argument must be a hash')
+      end
+    end
+  end
+
   describe '#get' do
-    subject { summary.get(:erb) }
+    subject { summary.get(filter: :erb) }
 
     before do
-      summary.observe(2.1, :erb)
-      summary.observe(4.1, :erb)
-      summary.observe(5.3, :haml)
+      summary.observe(2.1, filter: :erb)
+      summary.observe(4.1, filter: :erb)
+      summary.observe(5.3, filter: :haml)
     end
 
     it { is_expected.to be_a(DDTelemetry::Stats) }
@@ -22,12 +32,12 @@ describe DDTelemetry::Summary do
     subject { summary.labels }
 
     before do
-      summary.observe(2.1, :erb)
-      summary.observe(4.1, :erb)
-      summary.observe(5.3, :haml)
+      summary.observe(2.1, filter: :erb)
+      summary.observe(4.1, filter: :erb)
+      summary.observe(5.3, filter: :haml)
     end
 
-    it { is_expected.to contain_exactly(:haml, :erb) }
+    it { is_expected.to match_array([{ filter: :haml }, { filter: :erb }]) }
   end
 
   describe '#each' do
@@ -38,12 +48,12 @@ describe DDTelemetry::Summary do
     end
 
     before do
-      summary.observe(2.1, :erb)
-      summary.observe(4.1, :erb)
-      summary.observe(5.3, :haml)
+      summary.observe(2.1, filter: :erb)
+      summary.observe(4.1, filter: :erb)
+      summary.observe(5.3, filter: :haml)
     end
 
-    it { is_expected.to eq(haml: 5.3, erb: 3.1) }
+    it { is_expected.to eq({ filter: :haml } => 5.3, { filter: :erb } => 3.1) }
 
     it 'is enumerable' do
       expect(summary.map { |_label, stats| stats.sum }.sort)
@@ -55,17 +65,17 @@ describe DDTelemetry::Summary do
     subject { summary.to_s }
 
     before do
-      summary.observe(2.1, :erb)
-      summary.observe(4.1, :erb)
-      summary.observe(5.3, :haml)
+      summary.observe(2.1, filter: :erb)
+      summary.observe(4.1, filter: :erb)
+      summary.observe(5.3, filter: :haml)
     end
 
     it 'returns table' do
       expected = <<~TABLE
-             │ count    min    .50    .90    .95    max    tot
-        ─────┼────────────────────────────────────────────────
-         erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
-        haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
+                    │ count    min    .50    .90    .95    max    tot
+        ────────────┼────────────────────────────────────────────────
+         filter=erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
+        filter=haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
       TABLE
 
       expect(subject.strip).to eq(expected.strip)
