@@ -12,6 +12,10 @@ module DDTelemetry
 
     private
 
+    def label_to_s(label)
+      label.to_a.sort.map { |pair| pair.join('=') }.join(' ')
+    end
+
     def table_for_summary(summary)
       headers = ['', 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
 
@@ -26,7 +30,7 @@ module DDTelemetry
         tot   = stats.sum
         max   = stats.max
 
-        [label.to_s, count.to_s] + [min, p50, p90, p95, max, tot].map { |r| format('%4.2f', r) }
+        [label_to_s(label), count.to_s] + [min, p50, p90, p95, max, tot].map { |r| format('%4.2f', r) }
       end
 
       [headers] + rows
@@ -36,7 +40,7 @@ module DDTelemetry
       headers = ['', 'count']
 
       rows = counter.labels.map do |label|
-        [label.to_s, counter.get(label).to_s]
+        [label_to_s(label), counter.get(label).to_s]
       end
 
       [headers] + rows

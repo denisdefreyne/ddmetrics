@@ -5,42 +5,50 @@ describe DDTelemetry::Counter do
 
   describe 'new counter' do
     it 'starts at 0' do
-      expect(subject.get(:erb)).to eq(0)
-      expect(subject.get(:haml)).to eq(0)
+      expect(subject.get(filter: :erb)).to eq(0)
+      expect(subject.get(filter: :haml)).to eq(0)
     end
   end
 
   describe '#increment' do
-    subject { counter.increment(:erb) }
+    subject { counter.increment(filter: :erb) }
 
     it 'increments the matching value' do
       expect { subject }
-        .to change { counter.get(:erb) }
+        .to change { counter.get(filter: :erb) }
         .from(0)
         .to(1)
     end
 
     it 'does not increment any other value' do
-      expect(counter.get(:haml)).to eq(0)
+      expect(counter.get(filter: :haml)).to eq(0)
       expect { subject }
-        .not_to change { counter.get(:haml) }
+        .not_to change { counter.get(filter: :haml) }
+    end
+
+    context 'non-hash label' do
+      subject { counter.increment('WRONG UGH') }
+
+      it 'errors' do
+        expect { subject }.to raise_error(ArgumentError, 'label argument must be a hash')
+      end
     end
   end
 
   describe '#get' do
-    subject { counter.get(:erb) }
+    subject { counter.get(filter: :erb) }
 
     context 'not incremented' do
       it { is_expected.to eq(0) }
     end
 
     context 'incremented' do
-      before { counter.increment(:erb) }
+      before { counter.increment(filter: :erb) }
       it { is_expected.to eq(1) }
     end
 
     context 'other incremented' do
-      before { counter.increment(:haml) }
+      before { counter.increment(filter: :haml) }
       it { is_expected.to eq(0) }
     end
   end
@@ -49,12 +57,12 @@ describe DDTelemetry::Counter do
     subject { counter.labels }
 
     before do
-      counter.increment(:erb)
-      counter.increment(:erb)
-      counter.increment(:haml)
+      counter.increment(filter: :erb)
+      counter.increment(filter: :erb)
+      counter.increment(filter: :haml)
     end
 
-    it { is_expected.to contain_exactly(:haml, :erb) }
+    it { is_expected.to match_array([{ filter: :haml }, { filter: :erb }]) }
   end
 
   describe '#each' do
@@ -65,12 +73,12 @@ describe DDTelemetry::Counter do
     end
 
     before do
-      counter.increment(:erb)
-      counter.increment(:erb)
-      counter.increment(:haml)
+      counter.increment(filter: :erb)
+      counter.increment(filter: :erb)
+      counter.increment(filter: :haml)
     end
 
-    it { is_expected.to eq(haml: 1, erb: 2) }
+    it { is_expected.to eq({ filter: :haml } => 1, { filter: :erb } => 2) }
 
     it 'is enumerable' do
       expect(counter.map { |_label, count| count }.sort)
@@ -82,17 +90,17 @@ describe DDTelemetry::Counter do
     subject { counter.to_s }
 
     before do
-      counter.increment(:erb)
-      counter.increment(:erb)
-      counter.increment(:haml)
+      counter.increment(filter: :erb)
+      counter.increment(filter: :erb)
+      counter.increment(filter: :haml)
     end
 
     it 'returns table' do
       expected = <<~TABLE
-             │ count
-        ─────┼──────
-         erb │     2
-        haml │     1
+                    │ count
+        ────────────┼──────
+         filter=erb │     2
+        filter=haml │     1
       TABLE
 
       expect(subject.strip).to eq(expected.strip)

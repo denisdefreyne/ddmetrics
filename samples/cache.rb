@@ -11,16 +11,16 @@ class Cache
   end
 
   def []=(key, value)
-    @counter.increment(:set)
+    @counter.increment(type: :set)
 
     @map[key] = value
   end
 
   def [](key)
     if @map.key?(key)
-      @counter.increment(:get_hit)
+      @counter.increment(type: :get_hit)
     else
-      @counter.increment(:get_miss)
+      @counter.increment(type: :get_miss)
     end
 
     @map[key]
@@ -36,13 +36,13 @@ cache['greeting']
 cache['greeting']
 cache['greeting']
 
-p cache.counter.get(:set)
+p cache.counter.get(type: :set)
 # => 1
 
-p cache.counter.get(:get_hit)
+p cache.counter.get(type: :get_hit)
 # => 3
 
-p cache.counter.get(:get_miss)
+p cache.counter.get(type: :get_miss)
 # => 2
 
 puts cache.counter

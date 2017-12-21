@@ -26,5 +26,11 @@ module DDTelemetry
     def basic_metric_for(label, basic_class)
       @basic_metrics.fetch(label) { @basic_metrics[label] = basic_class.new }
     end
+
+    # @api private
+    def validate_label(label)
+      return if label.is_a?(Hash)
+      raise ArgumentError, 'label argument must be a hash'
+    end
   end
 end

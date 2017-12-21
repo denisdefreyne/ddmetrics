@@ -3,10 +3,12 @@
 module DDTelemetry
   class Counter < Metric
     def increment(label)
+      validate_label(label)
       basic_metric_for(label, BasicCounter).increment
     end
 
     def get(label)
+      validate_label(label)
       basic_metric_for(label, BasicCounter).value
     end
 
