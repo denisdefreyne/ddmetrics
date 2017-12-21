@@ -158,12 +158,12 @@ To create a summary, instantiate `DDTelemetry::Summary`:
 summary = DDTelemetry::Summary.new
 ```
 
-To observe a value, call `#observe` with a label, along with the value to observe:
+To observe a value, call `#observe` with the value to observe, along with a label:
 
 ```ruby
-summary.observe(:weather_api, 0.88)
-summary.observe(:weather_api, 1.07)
-summary.observe(:weather_api, 0.91)
+summary.observe(0.88, :weather_api)
+summary.observe(1.07, :weather_api)
+summary.observe(0.91, :weather_api)
 ```
 
 To get the list of observations for a certain label, use `#get`, which will return a `DDTelemetry::Stats` instance:
