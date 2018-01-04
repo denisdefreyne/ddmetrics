@@ -11,7 +11,7 @@ branches:
 
 before_install:
   - gem update --system
-  - gem update bundler
+  - gem install bundler -v 1.16.0
 
 cache: bundler
 
