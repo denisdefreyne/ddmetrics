@@ -13,11 +13,16 @@ module DDTelemetry
       [].tap do |lines|
         lines << row_to_s(@rows[0], column_lengths)
         lines << separator(column_lengths)
-        lines.concat(@rows.drop(1).map { |r| row_to_s(r, column_lengths) })
+        rows = sort_rows(@rows.drop(1))
+        lines.concat(rows.map { |r| row_to_s(r, column_lengths) })
       end.join("\n")
     end
 
     private
+
+    def sort_rows(rows)
+      rows.sort_by { |r| r.first.downcase }
+    end
 
     def row_to_s(row, column_lengths)
       values = row.zip(column_lengths).map { |text, length| text.rjust(length) }
