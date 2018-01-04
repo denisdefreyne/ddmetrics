@@ -1,5 +1,11 @@
 # DDMetrics news
 
+## 1.0.0rc1 (2018-01-04)
+
+Changes:
+
+* Renamed to DDMetrics (from DDTelemetry)
+
 ## 1.0.0a3 (2017-12-25)
 
 Changes:
