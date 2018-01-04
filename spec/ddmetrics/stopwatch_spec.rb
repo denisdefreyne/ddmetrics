@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe DDTelemetry::Stopwatch do
+describe DDMetrics::Stopwatch do
   subject(:stopwatch) { described_class.new }
 
   after { Timecop.return }
@@ -38,7 +38,7 @@ describe DDTelemetry::Stopwatch do
   it 'errors when stopping when not started' do
     expect { stopwatch.stop }
       .to raise_error(
-        DDTelemetry::Stopwatch::NotRunningError,
+        DDMetrics::Stopwatch::NotRunningError,
         'Cannot stop, because stopwatch is not running',
       )
   end
@@ -47,7 +47,7 @@ describe DDTelemetry::Stopwatch do
     stopwatch.start
     expect { stopwatch.start }
       .to raise_error(
-        DDTelemetry::Stopwatch::AlreadyRunningError,
+        DDMetrics::Stopwatch::AlreadyRunningError,
         'Cannot start, because stopwatch is already running',
       )
   end
@@ -71,7 +71,7 @@ describe DDTelemetry::Stopwatch do
     stopwatch.start
     expect { stopwatch.duration }
       .to raise_error(
-        DDTelemetry::Stopwatch::StillRunningError,
+        DDMetrics::Stopwatch::StillRunningError,
         'Cannot get duration, because stopwatch is still running',
       )
   end

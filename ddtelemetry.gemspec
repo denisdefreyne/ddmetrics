@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative 'lib/ddtelemetry/version'
+require_relative 'lib/ddmetrics/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'ddtelemetry'
-  spec.version       = DDTelemetry::VERSION
+  spec.name          = 'ddmetrics'
+  spec.version       = DDMetrics::VERSION
   spec.authors       = ['Denis Defreyne']
   spec.email         = ['denis+rubygems@denis.ws']
 
-  spec.summary       = 'Non-timeseries telemetry'
-  spec.homepage      = 'https://github.com/ddfreyne/ddtelemetry'
+  spec.summary       = 'Non-timeseries measurements for Ruby programs'
+  spec.homepage      = 'https://github.com/ddfreyne/ddmetrics'
   spec.license       = 'MIT'
 
   spec.required_ruby_version = '>= 2.3.0'

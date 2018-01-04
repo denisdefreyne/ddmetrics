@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module DDTelemetry
+module DDMetrics
   class BasicSummary
     attr_reader :values
 

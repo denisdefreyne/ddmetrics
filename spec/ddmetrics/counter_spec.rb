@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe DDTelemetry::Counter do
+describe DDMetrics::Counter do
   subject(:counter) { described_class.new }
 
   describe 'new counter' do
