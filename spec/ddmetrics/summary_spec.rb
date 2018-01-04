@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe DDTelemetry::Summary do
+describe DDMetrics::Summary do
   subject(:summary) { described_class.new }
 
   describe '#observe' do
@@ -22,7 +22,7 @@ describe DDTelemetry::Summary do
       summary.observe(5.3, filter: :haml)
     end
 
-    it { is_expected.to be_a(DDTelemetry::Stats) }
+    it { is_expected.to be_a(DDMetrics::Stats) }
 
     its(:sum) { is_expected.to eq(2.1 + 4.1) }
     its(:count) { is_expected.to eq(2) }

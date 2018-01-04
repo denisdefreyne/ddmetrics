@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module DDTelemetry
+module DDMetrics
   class Counter < Metric
     def increment(label)
       validate_label(label)
@@ -13,7 +13,7 @@ module DDTelemetry
     end
 
     def to_s
-      DDTelemetry::Printer.new.counter_to_s(self)
+      DDMetrics::Printer.new.counter_to_s(self)
     end
   end
 end

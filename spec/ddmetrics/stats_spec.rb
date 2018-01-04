@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe DDTelemetry::Stats do
+describe DDMetrics::Stats do
   subject(:stats) { described_class.new(values) }
 
   context 'no values' do
@@ -8,22 +8,22 @@ describe DDTelemetry::Stats do
 
     it 'errors on #min' do
       expect { subject.min }
-        .to raise_error(DDTelemetry::Stats::EmptyError)
+        .to raise_error(DDMetrics::Stats::EmptyError)
     end
 
     it 'errors on #max' do
       expect { subject.max }
-        .to raise_error(DDTelemetry::Stats::EmptyError)
+        .to raise_error(DDMetrics::Stats::EmptyError)
     end
 
     it 'errors on #avg' do
       expect { subject.avg }
-        .to raise_error(DDTelemetry::Stats::EmptyError)
+        .to raise_error(DDMetrics::Stats::EmptyError)
     end
 
     it 'errors on #sum' do
       expect { subject.sum }
-        .to raise_error(DDTelemetry::Stats::EmptyError)
+        .to raise_error(DDMetrics::Stats::EmptyError)
     end
 
     its(:count) { is_expected.to eq(0) }
@@ -32,7 +32,7 @@ describe DDTelemetry::Stats do
   context 'one value' do
     let(:values) { [2.1] }
 
-    its(:inspect) { is_expected.to eq('<DDTelemetry::Stats count=1>') }
+    its(:inspect) { is_expected.to eq('<DDMetrics::Stats count=1>') }
     its(:count) { is_expected.to eq(1) }
     its(:sum) { is_expected.to eq(2.1) }
     its(:avg) { is_expected.to eq(2.1) }
@@ -51,7 +51,7 @@ describe DDTelemetry::Stats do
   context 'two values' do
     let(:values) { [2.1, 4.1] }
 
-    its(:inspect) { is_expected.to eq('<DDTelemetry::Stats count=2>') }
+    its(:inspect) { is_expected.to eq('<DDMetrics::Stats count=2>') }
     its(:count) { is_expected.to be_within(0.000001).of(2) }
     its(:sum) { is_expected.to be_within(0.000001).of(6.2) }
     its(:avg) { is_expected.to be_within(0.000001).of(3.1) }

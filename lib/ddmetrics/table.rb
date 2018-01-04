@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module DDTelemetry
+module DDMetrics
   class Table
     def initialize(rows)
       @rows = rows

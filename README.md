@@ -1,12 +1,12 @@
-[![Gem version](https://img.shields.io/gem/v/ddtelemetry.svg)](http://rubygems.org/gems/ddtelemetry)
-[![Gem downloads](https://img.shields.io/gem/dt/ddtelemetry.svg)](http://rubygems.org/gems/ddtelemetry)
-[![Build status](https://img.shields.io/travis/ddfreyne/ddtelemetry.svg)](https://travis-ci.org/ddfreyne/ddtelemetry)
-[![Code Climate](https://img.shields.io/codeclimate/github/ddfreyne/ddtelemetry.svg)](https://codeclimate.com/github/ddfreyne/ddtelemetry)
-[![Code Coverage](https://img.shields.io/codecov/c/github/ddfreyne/ddtelemetry.svg)](https://codecov.io/gh/ddfreyne/ddtelemetry)
+[![Gem version](https://img.shields.io/gem/v/ddmetrics.svg)](http://rubygems.org/gems/ddmetrics)
+[![Gem downloads](https://img.shields.io/gem/dt/ddmetrics.svg)](http://rubygems.org/gems/ddmetrics)
+[![Build status](https://img.shields.io/travis/ddfreyne/ddmetrics.svg)](https://travis-ci.org/ddfreyne/ddmetrics)
+[![Code Climate](https://img.shields.io/codeclimate/github/ddfreyne/ddmetrics.svg)](https://codeclimate.com/github/ddfreyne/ddmetrics)
+[![Code Coverage](https://img.shields.io/codecov/c/github/ddfreyne/ddmetrics.svg)](https://codecov.io/gh/ddfreyne/ddmetrics)
 
-# DDTelemetry
+# DDMetrics
 
-_DDTelemetry_ is a Ruby library for recording and analysing measurements in short-running Ruby processes.
+_DDMetrics_ is a Ruby library for recording and analysing measurements in short-running Ruby processes.
 
 If you are looking for a full-featured timeseries monitoring system, look no further than [Prometheus](https://prometheus.io/).
 
@@ -30,17 +30,17 @@ class Cache
 end
 ```
 
-To start instrumenting this code, require `ddtelemetry`, create a counter, and record some metrics:
+To start instrumenting this code, require `ddmetrics`, create a counter, and record some metrics:
 
 ```ruby
-require 'ddtelemetry'
+require 'ddmetrics'
 
 class Cache
   attr_reader :counter
 
   def initialize
     @map = {}
-    @counter = DDTelemetry::Counter.new
+    @counter = DDMetrics::Counter.new
   end
 
   def []=(key, value)
@@ -74,7 +74,7 @@ cache['greeting']
 cache['greeting']
 ```
 
-Finally, get the recorded telemetry values:
+Finally, get the recorded values:
 
 ```ruby
 cache.counter.get(type: :set)      # => 1
@@ -109,7 +109,7 @@ type=get_miss │     2
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ddtelemetry'
+gem 'ddmetrics'
 ```
 
 And then execute:
@@ -118,11 +118,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ddtelemetry
+    $ gem install ddmetrics
 
 ## Usage
 
-_DDTelemetry_ provides two metric types:
+_DDMetrics_ provides two metric types:
 
 * A **counter** is an integer metric that only ever increases. Examples: cache hits, number of files written, …
 
@@ -137,10 +137,10 @@ request_durations_summary.observe(1.07, api: :weather)
 
 ### Counters
 
-To create a counter, instantiate `DDTelemetry::Counter`:
+To create a counter, instantiate `DDMetrics::Counter`:
 
 ```ruby
-counter = DDTelemetry::Counter.new
+counter = DDMetrics::Counter.new
 ```
 
 To increment a counter, call `#increment` with a label:
@@ -158,10 +158,10 @@ counter.get(target: :file_cache)
 
 ### Summaries
 
-To create a summary, instantiate `DDTelemetry::Summary`:
+To create a summary, instantiate `DDMetrics::Summary`:
 
 ```ruby
-summary = DDTelemetry::Summary.new
+summary = DDMetrics::Summary.new
 ```
 
 To observe a value, call `#observe` with the value to observe, along with a label:
@@ -172,14 +172,14 @@ summary.observe(1.07, api: :weather)
 summary.observe(0.91, api: :weather)
 ```
 
-To get the list of observations for a certain label, use `#get`, which will return a `DDTelemetry::Stats` instance:
+To get the list of observations for a certain label, use `#get`, which will return a `DDMetrics::Stats` instance:
 
 ```ruby
 summary.get(api: :weather)
-# => <DDTelemetry::Stats>
+# => <DDMetrics::Stats>
 ```
 
-The following methods are available on `DDTelemetry::Stats`:
+The following methods are available on `DDMetrics::Stats`:
 
 * `#count`: returns the number of values
 * `#sum`: returns the sum of all values
@@ -193,7 +193,7 @@ The following methods are available on `DDTelemetry::Stats`:
 To print a metric, use `#to_s`. For example:
 
 ```ruby
-summary = DDTelemetry::Summary.new
+summary = DDMetrics::Summary.new
 
 summary.observe(2.1, filter: :erb)
 summary.observe(4.1, filter: :erb)
@@ -213,10 +213,10 @@ filter=haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
 
 ### Stopwatch
 
-The `DDTelemetry::Stopwatch` class can be used to measure durations. Use `#start` and `#stop` to start and stop the stopwatch, respectively, and `#duration` to read the value of the stopwatch:
+The `DDMetrics::Stopwatch` class can be used to measure durations. Use `#start` and `#stop` to start and stop the stopwatch, respectively, and `#duration` to read the value of the stopwatch:
 
 ```ruby
-stopwatch = DDTelemetry::Stopwatch.new
+stopwatch = DDMetrics::Stopwatch.new
 
 stopwatch.start
 sleep 1
@@ -249,7 +249,7 @@ Run tests:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ddfreyne/ddtelemetry. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ddfreyne/ddmetrics. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -257,4 +257,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ## Code of Conduct
 
-Everyone interacting in the DDTelemetry project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/ddfreyne/ddtelemetry/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the DDMetrics project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/ddfreyne/ddmetrics/blob/master/CODE_OF_CONDUCT.md).

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'ddtelemetry'
+require 'ddmetrics'
 
 class Cache
   attr_reader :counter
 
   def initialize
     @map = {}
-    @counter = DDTelemetry::Counter.new
+    @counter = DDMetrics::Counter.new
   end
 
   def []=(key, value)

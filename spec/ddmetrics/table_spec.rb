@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe DDTelemetry::Table do
+describe DDMetrics::Table do
   let(:table) { described_class.new(rows) }
 
   let(:rows) do

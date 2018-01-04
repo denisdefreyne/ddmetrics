@@ -13,9 +13,9 @@ def run(*args)
   system(*args)
 end
 
-gem_name = 'ddtelemetry'
-version_constant = 'DDTelemetry::VERSION'
-gem_path = 'ddtelemetry'
+gem_name = 'ddmetrics'
+version_constant = 'DDMetrics::VERSION'
+gem_path = 'ddmetrics'
 
 puts '=== Logging in to GitHub’s API…'
 client = Octokit::Client.new(netrc: true)
@@ -42,7 +42,7 @@ puts "Version = #{version}"
 puts
 
 puts '=== Building new gem…'
-run('gem', 'build', 'ddtelemetry.gemspec')
+run('gem', 'build', 'ddmetrics.gemspec')
 puts
 
 puts '=== Verifying that gems were built properly…'
@@ -73,8 +73,8 @@ end
 puts
 
 puts '=== Verifying that release does not yet exist…'
-releases = client.releases('ddfreyne/ddtelemetry')
-release = releases.find { |r| r.tag_name == DDTelemetry::VERSION }
+releases = client.releases('ddfreyne/ddmetrics')
+release = releases.find { |r| r.tag_name == DDMetrics::VERSION }
 if release
   warn 'Release already exists!'
   warn 'ABORTED!'
@@ -83,7 +83,7 @@ end
 puts
 
 puts '=== Creating Git tag…'
-run('git', 'tag', '--sign', '--annotate', DDTelemetry::VERSION, '--message', "Version #{DDTelemetry::VERSION}")
+run('git', 'tag', '--sign', '--annotate', DDMetrics::VERSION, '--message', "Version #{DDMetrics::VERSION}")
 puts
 
 puts '=== Pushing Git data…'
@@ -91,7 +91,7 @@ run('git', 'push', 'origin', '--tags')
 puts
 
 puts '=== Pushing gem…'
-run('gem', 'push', "ddtelemetry-#{DDTelemetry::VERSION}.gem")
+run('gem', 'push', "ddmetrics-#{DDMetrics::VERSION}.gem")
 puts
 
 puts '=== Reading release notes…'
@@ -104,9 +104,9 @@ puts
 
 puts '=== Creating release on GitHub…'
 sleep 3 # Give GitHub some time to detect the new tag
-is_prerelease = DDTelemetry::VERSION =~ /a|b|rc/ || DDTelemetry::VERSION =~ /^0/
+is_prerelease = DDMetrics::VERSION =~ /a|b|rc/ || DDMetrics::VERSION =~ /^0/
 client.create_release(
-  'ddfreyne/ddtelemetry', DDTelemetry::VERSION,
+  'ddfreyne/ddmetrics', DDMetrics::VERSION,
   prerelease: !is_prerelease.nil?,
   body: release_notes
 )

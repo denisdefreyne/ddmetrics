@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe DDTelemetry::BasicCounter do
+describe DDMetrics::BasicCounter do
   subject(:counter) { described_class.new }
 
   it 'starts at 0' do

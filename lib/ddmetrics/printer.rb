@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-module DDTelemetry
+module DDMetrics
   class Printer
     def summary_to_s(summary)
-      DDTelemetry::Table.new(table_for_summary(summary)).to_s
+      DDMetrics::Table.new(table_for_summary(summary)).to_s
     end
 
     def counter_to_s(counter)
-      DDTelemetry::Table.new(table_for_counter(counter)).to_s
+      DDMetrics::Table.new(table_for_counter(counter)).to_s
     end
 
     private

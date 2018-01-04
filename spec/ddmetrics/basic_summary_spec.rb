@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe DDTelemetry::BasicSummary do
+describe DDMetrics::BasicSummary do
   subject(:summary) { described_class.new }
 
   context 'no observations' do

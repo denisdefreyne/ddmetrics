@@ -1,4 +1,4 @@
-# DDTelemetry news
+# DDMetrics news
 
 ## 1.0.0a3 (2017-12-25)
 
