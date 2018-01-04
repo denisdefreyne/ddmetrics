@@ -96,6 +96,14 @@ type=get_miss │     2
  type=get_hit │     3
 ```
 
+## Scope
+
+* No timeseries: Metrics are not recorded over time. If you want to record timeseries data, consider using [Prometheus](https://prometheus.io/).
+
+* Not intended for long-running processes: Metrics data (particularly summary metrics) can accumulate in memory and cause memory pressure. This project is not suited for long-running processes, such as servers. For monitoring long-running processes, consider using [Prometheus](https://prometheus.io/).
+
+* Not thread-safe: The implementation is not thread-safe. If you require thread safety, consider wrapping the functionality provided.
+
 ## Installation
 
 Add this line to your application's Gemfile:
