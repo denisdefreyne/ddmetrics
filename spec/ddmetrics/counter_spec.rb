@@ -97,10 +97,10 @@ describe DDMetrics::Counter do
 
     it 'returns table' do
       expected = <<~TABLE
-                    │ count
-        ────────────┼──────
-         filter=erb │     2
-        filter=haml │     1
+        filter │ count
+        ───────┼──────
+           erb │     2
+          haml │     1
       TABLE
 
       expect(subject.strip).to eq(expected.strip)
