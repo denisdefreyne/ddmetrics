@@ -64,21 +64,44 @@ describe DDMetrics::Summary do
   describe '#to_s' do
     subject { summary.to_s }
 
-    before do
-      summary.observe(2.1, filter: :erb)
-      summary.observe(4.1, filter: :erb)
-      summary.observe(5.3, filter: :haml)
+    context 'one label' do
+      before do
+        summary.observe(2.1, filter: :erb)
+        summary.observe(4.1, filter: :erb)
+        summary.observe(5.3, filter: :haml)
+      end
+
+      it 'returns table' do
+        expected = <<~TABLE
+          filter │ count    min    .50    .90    .95    max    tot
+          ───────┼────────────────────────────────────────────────
+             erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
+            haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
+        TABLE
+
+        expect(subject.strip).to eq(expected.strip)
+      end
     end
 
-    it 'returns table' do
-      expected = <<~TABLE
-                    │ count    min    .50    .90    .95    max    tot
-        ────────────┼────────────────────────────────────────────────
-         filter=erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
-        filter=haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
-      TABLE
+    context 'multiple labels' do
+      before do
+        summary.observe(2.1, filter: :erb, stage: :pre)
+        summary.observe(4.1, filter: :erb, stage: :pre)
+        summary.observe(1.2, filter: :erb, stage: :post)
+        summary.observe(5.3, filter: :haml, stage: :post)
+      end
 
-      expect(subject.strip).to eq(expected.strip)
+      it 'returns table' do
+        expected = <<~TABLE
+          filter   stage │ count    min    .50    .90    .95    max    tot
+          ───────────────┼────────────────────────────────────────────────
+             erb     pre │     2   2.10   3.10   3.90   4.00   4.10   6.20
+             erb    post │     1   1.20   1.20   1.20   1.20   1.20   1.20
+            haml    post │     1   5.30   5.30   5.30   5.30   5.30   5.30
+        TABLE
+
+        expect(subject.strip).to eq(expected.strip)
+      end
     end
   end
 end

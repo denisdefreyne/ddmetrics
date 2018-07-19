@@ -3,23 +3,21 @@
 module DDMetrics
   class Printer
     def summary_to_s(summary)
-      DDMetrics::Table.new(table_for_summary(summary)).to_s
+      table_for_summary(summary).to_s
     end
 
     def counter_to_s(counter)
-      DDMetrics::Table.new(table_for_counter(counter)).to_s
+      table_for_counter(counter).to_s
     end
 
     private
 
-    def label_to_s(label)
-      label.to_a.sort.map { |pair| pair.join('=') }.join(' ')
-    end
-
     def table_for_summary(summary)
-      headers = ['', 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
+      header_labels = nil
+      headers = ['count', 'min', '.50', '.90', '.95', 'max', 'tot']
 
       rows = summary.labels.map do |label|
+        header_labels ||= label.to_a.sort.map(&:first).map(&:to_s)
         stats = summary.get(label)
 
         count = stats.count
@@ -30,20 +28,22 @@ module DDMetrics
         tot   = stats.sum
         max   = stats.max
 
-        [label_to_s(label), count.to_s] + [min, p50, p90, p95, max, tot].map { |r| format('%4.2f', r) }
+        label.to_a.sort.map(&:last).map(&:to_s) + [count.to_s] + [min, p50, p90, p95, max, tot].map { |r| format('%4.2f', r) }
       end
 
-      [headers] + rows
+      DDMetrics::Table.new([header_labels + headers] + rows, num_headers: header_labels.size)
     end
 
     def table_for_counter(counter)
-      headers = ['', 'count']
+      header_labels = nil
+      headers = ['count']
 
       rows = counter.labels.map do |label|
-        [label_to_s(label), counter.get(label).to_s]
+        header_labels ||= label.to_a.sort.map(&:first).map(&:to_s)
+        label.to_a.sort.map(&:last).map(&:to_s) + [counter.get(label).to_s]
       end
 
-      [headers] + rows
+      DDMetrics::Table.new([header_labels + headers] + rows, num_headers: header_labels.size)
     end
   end
 end
