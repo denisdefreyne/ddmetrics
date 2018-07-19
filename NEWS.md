@@ -1,5 +1,11 @@
 # DDMetrics news
 
+## 1.0.1 (2018-07-19)
+
+Enhancements:
+
+* Improved formatting of labels in tables (#7)
+
 ## 1.0.0 (2018-01-07)
 
 (identical to 1.0.0rc1)
