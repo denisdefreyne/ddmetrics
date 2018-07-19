@@ -89,11 +89,11 @@ puts cache.counter
 ```
 
 ```
-              │ count
-──────────────┼──────
-type=get_miss │     2
-     type=set │     1
- type=get_hit │     3
+    type │ count
+─────────┼──────
+ get_hit │     3
+get_miss │     2
+     set │     1
 ```
 
 ## Scope
@@ -205,10 +205,10 @@ puts summary
 Output:
 
 ```
-            │ count    min    .50    .90    .95    max    tot
-────────────┼────────────────────────────────────────────────
- filter=erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
-filter=haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
+filter │ count    min    .50    .90    .95    max    tot
+───────┼────────────────────────────────────────────────
+   erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
+  haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
 ```
 
 ### Stopwatch
