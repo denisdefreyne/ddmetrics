@@ -13,8 +13,8 @@ module DDMetrics
       DDMetrics::Stats.new(values)
     end
 
-    def to_s
-      DDMetrics::Printer.new.summary_to_s(self)
+    def to_s(group_by: nil)
+      DDMetrics::Printer.new.summary_to_s(self, group_by: group_by)
     end
   end
 end

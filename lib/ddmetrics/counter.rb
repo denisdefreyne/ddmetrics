@@ -12,8 +12,8 @@ module DDMetrics
       basic_metric_for(label, BasicCounter).value
     end
 
-    def to_s
-      DDMetrics::Printer.new.counter_to_s(self)
+    def to_s(group_by: nil)
+      DDMetrics::Printer.new.counter_to_s(self, group_by: group_by)
     end
   end
 end

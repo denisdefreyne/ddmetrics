@@ -91,16 +91,65 @@ describe DDMetrics::Summary do
         summary.observe(5.3, filter: :haml, stage: :post)
       end
 
-      it 'returns table' do
-        expected = <<~TABLE
-          filter   stage │ count    min    .50    .90    .95    max    tot
-          ───────────────┼────────────────────────────────────────────────
-             erb     pre │     2   2.10   3.10   3.90   4.00   4.10   6.20
-             erb    post │     1   1.20   1.20   1.20   1.20   1.20   1.20
-            haml    post │     1   5.30   5.30   5.30   5.30   5.30   5.30
-        TABLE
+      context 'not grouped' do
+        subject { summary.to_s }
 
-        expect(subject.strip).to eq(expected.strip)
+        it 'returns table' do
+          expected = <<~TABLE
+            filter   stage │ count    min    .50    .90    .95    max    tot
+            ───────────────┼────────────────────────────────────────────────
+               erb     pre │     2   2.10   3.10   3.90   4.00   4.10   6.20
+               erb    post │     1   1.20   1.20   1.20   1.20   1.20   1.20
+              haml    post │     1   5.30   5.30   5.30   5.30   5.30   5.30
+          TABLE
+
+          expect(subject.strip).to eq(expected.strip)
+        end
+      end
+
+      context 'partially grouped with symbol' do
+        subject { summary.to_s(group_by: :filter) }
+
+        it 'returns table' do
+          expected = <<~TABLE
+            filter │ count    min    .50    .90    .95    max    tot
+            ───────┼────────────────────────────────────────────────
+               erb │     3   1.20   2.10   3.70   3.90   4.10   7.40
+              haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
+          TABLE
+
+          expect(subject.strip).to eq(expected.strip)
+        end
+      end
+
+      context 'partially grouped with array' do
+        subject { summary.to_s(group_by: %i[stage filter]) }
+
+        it 'returns table' do
+          expected = <<~TABLE
+            stage   filter │ count    min    .50    .90    .95    max    tot
+            ───────────────┼────────────────────────────────────────────────
+             post      erb │     1   1.20   1.20   1.20   1.20   1.20   1.20
+             post     haml │     1   5.30   5.30   5.30   5.30   5.30   5.30
+              pre      erb │     2   2.10   3.10   3.90   4.00   4.10   6.20
+          TABLE
+
+          expect(subject.strip).to eq(expected.strip)
+        end
+      end
+
+      context 'all grouped' do
+        subject { summary.to_s(group_by: []) }
+
+        it 'returns table' do
+          expected = <<~TABLE
+             │ count    min    .50    .90    .95    max     tot
+            ─┼─────────────────────────────────────────────────
+             │     4   1.20   3.10   4.94   5.12   5.30   12.70
+          TABLE
+
+          expect(subject.strip).to eq(expected.strip)
+        end
       end
     end
   end

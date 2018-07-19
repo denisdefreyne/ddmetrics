@@ -8,6 +8,8 @@ module DDMetrics
       end
     end
 
+    attr_reader :values
+
     def initialize(values)
       @values = values
     end
