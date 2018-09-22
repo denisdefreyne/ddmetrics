@@ -30,6 +30,7 @@ module DDMetrics
     # @api private
     def validate_label(label)
       return if label.is_a?(Hash)
+
       raise ArgumentError, 'label argument must be a hash'
     end
   end

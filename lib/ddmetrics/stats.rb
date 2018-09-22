@@ -22,6 +22,7 @@ module DDMetrics
 
     def sum
       raise EmptyError if @values.empty?
+
       @values.reduce(:+)
     end
 

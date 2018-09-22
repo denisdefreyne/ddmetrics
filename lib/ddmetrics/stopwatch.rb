@@ -27,17 +27,20 @@ module DDMetrics
 
     def start
       raise AlreadyRunningError if running?
+
       @last_start = Time.now
     end
 
     def stop
       raise NotRunningError unless running?
+
       @duration += (Time.now - @last_start)
       @last_start = nil
     end
 
     def duration
       raise StillRunningError if running?
+
       @duration
     end
 
