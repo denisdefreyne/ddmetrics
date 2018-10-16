@@ -10,29 +10,23 @@ describe DDMetrics::Stopwatch do
   end
 
   it 'records correct duration after start+stop' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
     stopwatch.start
-
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    sleep 0.1
     stopwatch.stop
 
-    expect(stopwatch.duration).to eq(1.0)
+    expect(stopwatch.duration).to be_within(0.01).of(0.1)
   end
 
   it 'records correct duration after start+stop+start+stop' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
     stopwatch.start
-
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    sleep 0.1
+    stopwatch.stop
+    sleep 0.1
+    stopwatch.start
+    sleep 0.1
     stopwatch.stop
 
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    stopwatch.start
-
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
-    stopwatch.stop
-
-    expect(stopwatch.duration).to eq(1.0 + 3.0)
+    expect(stopwatch.duration).to be_within(0.02).of(0.2)
   end
 
   it 'errors when stopping when not started' do

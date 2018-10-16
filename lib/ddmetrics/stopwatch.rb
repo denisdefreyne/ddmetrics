@@ -2,6 +2,8 @@
 
 module DDMetrics
   class Stopwatch
+    NANOS_PER_SECOND = 1_000_000_000
+
     class AlreadyRunningError < StandardError
       def message
         'Cannot start, because stopwatch is already running'
@@ -21,27 +23,27 @@ module DDMetrics
     end
 
     def initialize
-      @duration = 0.0
+      @duration = 0
       @last_start = nil
     end
 
     def start
       raise AlreadyRunningError if running?
 
-      @last_start = Time.now
+      @last_start = nanos_now
     end
 
     def stop
       raise NotRunningError unless running?
 
-      @duration += (Time.now - @last_start)
+      @duration += (nanos_now - @last_start)
       @last_start = nil
     end
 
     def duration
       raise StillRunningError if running?
 
-      @duration
+      @duration.to_f / NANOS_PER_SECOND
     end
 
     def running?
@@ -50,6 +52,12 @@ module DDMetrics
 
     def stopped?
       !running?
+    end
+
+    private
+
+    def nanos_now
+      Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
     end
   end
 end
