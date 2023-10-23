@@ -2,7 +2,6 @@
 [![Gem downloads](https://img.shields.io/gem/dt/ddmetrics.svg)](http://rubygems.org/gems/ddmetrics)
 [![Build status](https://img.shields.io/travis/ddfreyne/ddmetrics.svg)](https://travis-ci.org/ddfreyne/ddmetrics)
 [![Code Climate](https://img.shields.io/codeclimate/github/ddfreyne/ddmetrics.svg)](https://codeclimate.com/github/ddfreyne/ddmetrics)
-[![Code Coverage](https://img.shields.io/codecov/c/github/ddfreyne/ddmetrics.svg)](https://codecov.io/gh/ddfreyne/ddmetrics)
 
 # DDMetrics
 

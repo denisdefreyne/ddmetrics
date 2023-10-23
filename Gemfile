@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :devel do
-  gem 'codecov', require: false
+  gem 'simplecov', require: false
   gem 'fuubar'
   gem 'rake'
   gem 'rspec'
