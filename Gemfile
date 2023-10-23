@@ -10,6 +10,8 @@ group :devel do
   gem 'rspec'
   gem 'rspec-its'
   gem 'rubocop', '~> 1.57'
+  gem 'rubocop-rake', '~> 0.6.0'
+  gem 'rubocop-rspec', '~> 2.24'
   gem 'simplecov', require: false
   gem 'timecop', '~> 0.9'
 end
