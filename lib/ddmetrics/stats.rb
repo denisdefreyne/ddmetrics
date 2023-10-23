@@ -43,7 +43,7 @@ module DDMetrics
 
       target = (@values.size - 1) * fraction.to_f
       interp = target % 1.0
-      sorted_values[target.floor] * (1.0 - interp) + sorted_values[target.ceil] * interp
+      (sorted_values[target.floor] * (1.0 - interp)) + (sorted_values[target.ceil] * interp)
     end
 
     private
