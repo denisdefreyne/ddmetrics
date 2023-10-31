@@ -1,5 +1,11 @@
 # DDMetrics news
 
+## 1.1.0 (2023-10-31)
+
+Features:
+
+* Added `Stopwatch#run`
+
 ## 1.0.1 (2018-07-19)
 
 Enhancements:
