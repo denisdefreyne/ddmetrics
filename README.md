@@ -234,6 +234,25 @@ puts "That took #{stopwatch.duration}s."
 # Output: That took 2.012879s.
 ```
 
+You can use `#run` with a block for convenience:
+
+```ruby
+stopwatch.run do
+  sleep 1
+end
+```
+
+`#run` will return the value of the block:
+
+```ruby
+result = stopwatch.run do
+  sleep 1
+  'Donkey'
+end
+puts result
+# Output: Donkey
+```
+
 You can query whether or not a stopwatch is running using `#running?`; `#stopped?` is the opposite of `#running?`.
 
 ## Development

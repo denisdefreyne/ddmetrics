@@ -29,6 +29,34 @@ describe DDMetrics::Stopwatch do
     expect(stopwatch.duration).to be_within(0.02).of(0.2)
   end
 
+  it 'records correct duration with single #run call' do
+    stopwatch.run do
+      sleep 0.1
+    end
+
+    expect(stopwatch.duration).to be_within(0.01).of(0.1)
+  end
+
+  it 'records correct duration with multiple #run calls' do
+    stopwatch.run do
+      sleep 0.1
+    end
+    stopwatch.run do
+      sleep 0.2
+    end
+
+    expect(stopwatch.duration).to be_within(0.03).of(0.3)
+  end
+
+  it 'returns the right value from a #run call' do
+    result = stopwatch.run do
+      sleep 0.1
+      'donkey'
+    end
+
+    expect(result).to eq('donkey')
+  end
+
   it 'errors when stopping when not started' do
     expect { stopwatch.stop }
       .to raise_error(
