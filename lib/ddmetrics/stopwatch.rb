@@ -27,6 +27,13 @@ module DDMetrics
       @last_start = nil
     end
 
+    def run
+      start
+      yield
+    ensure
+      stop
+    end
+
     def start
       raise AlreadyRunningError if running?
 
